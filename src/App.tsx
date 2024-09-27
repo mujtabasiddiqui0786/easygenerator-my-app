@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Dashboard from './components/Dashboard';
+import Weather from './components/Weather';
+// import EasyGeneratorGPT from './components/EasyGeneratorGPT';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 
@@ -21,7 +23,22 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* Add other routes here */}
+          <Route
+            path="/weather"
+            element={
+              <PrivateRoute>
+                <Weather />
+              </PrivateRoute>
+            }
+          />
+          {/* <Route
+            path="/easygeneratorgpt"
+            element={
+              <PrivateRoute>
+                <EasyGeneratorGPT />
+              </PrivateRoute>
+            }
+          /> */}
         </Routes>
       </Layout>
     </Router>
