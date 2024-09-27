@@ -9,6 +9,7 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [error, setError] = useState<string>('');
 
   const validatePassword = (password: string): boolean => {
     const lengthRequirement = /.{8,}/;
@@ -26,17 +27,21 @@ const SignUp = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
     if (!validatePassword(password)) {
-      alert('Password does not meet requirements.');
+      setError('Password does not meet requirements.');
       return;
     }
 
     try {
-      await axios.post(`${API_BASE_URL}/signup`, { email, name, password });
-      navigate('/app');
-    } catch (error) {
-      alert('Error signing up.');
+      const response = await axios.post(`${API_BASE_URL}/signup`, { email, name, password });
+      // Optionally, automatically log in the user after sign-up
+      const { accessToken } = response.data;
+      localStorage.setItem('token', accessToken);
+      navigate('/dashboard'); // Redirect to dashboard
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Error signing up.');
     }
   };
 

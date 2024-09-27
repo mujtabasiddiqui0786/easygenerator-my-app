@@ -20,15 +20,23 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [error, setError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
     try {
-      await axios.post(`${API_BASE_URL}/signin`, { email, password });
-      navigate('/app');
-    } catch (error) {
-      alert('Error signing in.');
+      const response = await axios.post(`${API_BASE_URL}/signin`, {
+        email,
+        password,
+      });
+      const { accessToken } = response.data;
+      // Store the token in localStorage or cookies
+      localStorage.setItem('token', accessToken);
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Error signing in.');
     }
   };
 
