@@ -1,58 +1,100 @@
 // src/components/SignUp.tsx
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Avatar,
+  Button,
+  TextField,
+  Link as MuiLink,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Paper,
+} from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../apiConfig';
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
+const SignUp: React.FC = () => {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
-  const [error, setError] = useState<string>('');
 
-  const validatePassword = (password: string): boolean => {
-    const lengthRequirement = /.{8,}/;
-    const letterRequirement = /[A-Za-z]/;
-    const numberRequirement = /[0-9]/;
-    const specialCharRequirement = /[!@#$%^&*(),.?":{}|<>]/;
-
-    return (
-      lengthRequirement.test(password) &&
-      letterRequirement.test(password) &&
-      numberRequirement.test(password) &&
-      specialCharRequirement.test(password)
-    );
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (!validatePassword(password)) {
-      setError('Password does not meet requirements.');
-      return;
-    }
-
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE_URL}/signup`, { email, name, password });
-      // Optionally, automatically log in the user after sign-up
-      const { accessToken } = response.data;
-      localStorage.setItem('token', accessToken);
-      navigate('/dashboard'); // Redirect to dashboard
+      await axios.post(`${API_BASE_URL}/signup`, { name, email, password });
+      navigate('/');
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Error signing up.');
+      // Handle error appropriately
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign Up</h2>
-      <input type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
-      <input type="text" placeholder="Name" required onChange={(e) => setName(e.target.value)} />
-      <input type="password" placeholder="Password" required onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Sign Up</button>
-    </form>
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={6} sx={{ mt: 8, p: 4, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign Up
+          </Typography>
+          {/* Error handling can be added here */}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Full Name"
+              autoComplete="name"
+              autoFocus
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Email Address"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Typography variant="body2">
+                    Already have an account? Sign in
+                  </Typography>
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

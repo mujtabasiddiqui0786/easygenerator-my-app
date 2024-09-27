@@ -1,88 +1,96 @@
 // src/components/SignIn.tsx
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Grid,
-  Alert,
-  Paper,
   Avatar,
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link as MuiLink,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Paper,
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from 'axios';
 import API_BASE_URL from '../apiConfig';
 
-const SignIn = () => {
+
+const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const [error, setError] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE_URL}/signin`, {
-        email,
-        password,
-      });
+      const response = await axios.post(`${API_BASE_URL}/signin`, { email, password });
       const { accessToken } = response.data;
-      // Store the token in localStorage or cookies
       localStorage.setItem('token', accessToken);
       navigate('/dashboard');
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Error signing in.');
+      // Handle error appropriately
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ mt: 8, p: 4 }}>
-        <Box display="flex" flexDirection="column" alignItems="center">
+      <Paper elevation={6} sx={{ mt: 8, p: 4, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign In
+            Sign in
           </Typography>
-          {/* {error && <Alert severity="error">{error}</Alert>} */}
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          {/* Error handling can be added here */}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
-              fullWidth
-              label="Email Address"
               margin="normal"
               required
-              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              label="Email Address"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
+              margin="normal"
+              required
               fullWidth
               label="Password"
               type="password"
-              margin="normal"
-              required
-              onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+              sx={{ mt: 1 }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 2, mb: 2 }}
             >
               Sign In
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="space-between">
+              <Grid item>
+                <MuiLink href="#" variant="body2">
+                  Forgot password?
+                </MuiLink>
+              </Grid>
               <Grid item>
                 <Link to="/signup" style={{ textDecoration: 'none' }}>
                   <Typography variant="body2">
-                    Don't have an account? Sign Up
+                    {"Don't have an account? Sign Up"}
                   </Typography>
                 </Link>
               </Grid>

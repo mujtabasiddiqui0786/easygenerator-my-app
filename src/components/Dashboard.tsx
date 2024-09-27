@@ -1,51 +1,27 @@
 // src/components/Dashboard.tsx
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import API_BASE_URL from '../apiConfig';
+import React, { useContext } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+  Container,
+  CssBaseline,
+  Button,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Container, Box, Button } from '@mui/material';
-import apiClient from '../apiClient';
+import { ColorModeContext } from '../ThemeContext';
+import { useTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 
 const Dashboard: React.FC = () => {
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      // If there's no token, redirect to login
-      navigate('/');
-    }
-
-    // Fetch data from a protected route
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get(`${API_BASE_URL}/dashboard`, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     setMessage(response.data.message);
-    //   } catch (error) {
-    //     console.error(error);
-    //     // If there's an error (e.g., invalid token), redirect to login
-    //     navigate('/');
-    //   }
-    // };
-
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get('/dashboard');
-        setMessage(response.data.message);
-      } catch (error) {
-        console.error(error);
-        navigate('/');
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
+  const colorMode = useContext(ColorModeContext);
+  const theme = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -53,17 +29,47 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ mt: 8, textAlign: 'center' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Dashboard
-        </Typography>
-        <Typography variant="h6">{message}</Typography>
-        <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mt: 4 }}>
-          Logout
-        </Button>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            // onClick={handleDrawerToggle} // For sidebar menu if needed
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Dashboard
+          </Typography>
+          <IconButton
+            sx={{ ml: 1 }}
+            color="inherit"
+            onClick={colorMode.toggleColorMode}
+          >
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, mt: 8 }}
+      >
+        <Container maxWidth="lg">
+          {/* Place your dashboard content here */}
+          <Typography variant="h4" gutterBottom>
+            Welcome to your Dashboard
+          </Typography>
+          {/* Additional components and content */}
+        </Container>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
