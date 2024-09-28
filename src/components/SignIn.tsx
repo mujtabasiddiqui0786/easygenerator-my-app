@@ -1,5 +1,5 @@
 // src/components/SignIn.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Avatar,
   Button,
@@ -25,10 +25,29 @@ const SignIn: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Check if user is logged in (e.g., check if JWT token is in localStorage)
+    const token = localStorage.getItem('token');
+    if (token) {
+      // If logged in, redirect to dashboard
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
+    // Basic validation rules
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Please enter a valid email.');
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      setErrorMessage('Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character.');
+      return;
+    }
     try {
       const response = await axios.post(`${API_BASE_URL}/signin`, { email, password });
       const { accessToken } = response.data;

@@ -1,10 +1,19 @@
 // src/components/Dashboard.tsx
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Container, Typography, Grid, Card, CardContent, CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in (e.g., check if JWT token is in localStorage)
+    const token = localStorage.getItem('token');
+    if (token) {
+      // If logged in, redirect to dashboard
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 8 }}>
