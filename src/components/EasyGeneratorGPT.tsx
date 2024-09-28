@@ -15,6 +15,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/system';
 import { motion } from 'framer-motion';
 import apiClient from '../apiClient';
+import BackButton from './BackButton';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -93,6 +94,7 @@ const EasyGeneratorGPT: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 8 }}>
+      <BackButton />
       <ChatContainer elevation={3}>
         <Typography variant="h4" gutterBottom align="center">
           EasyGeneratorGPT

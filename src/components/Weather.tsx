@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
 import apiClient from '../apiClient';
+import BackButton from './BackButton';
 
 interface WeatherData {
   city: string;
@@ -37,6 +38,7 @@ const Weather: React.FC = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <BackButton />
       <Typography variant="h4" gutterBottom>
         Weather Checker
       </Typography>

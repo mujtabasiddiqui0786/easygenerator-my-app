@@ -3,7 +3,7 @@ import axios from 'axios';
 import API_BASE_URL from './apiConfig';
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.REACT_APP_BACKEND_UR,
 });
 
 apiClient.interceptors.request.use((config) => {
