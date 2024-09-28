@@ -4,7 +4,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Dashboard from './components/Dashboard';
 import Weather from './components/Weather';
-// import EasyGeneratorGPT from './components/EasyGeneratorGPT';
+import EasyGeneratorGPT from './components/EasyGeneratorGPT';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 
@@ -31,14 +31,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/easygeneratorgpt"
             element={
               <PrivateRoute>
                 <EasyGeneratorGPT />
               </PrivateRoute>
             }
-          /> */}
+          />
         </Routes>
       </Layout>
     </Router>
