@@ -50,8 +50,9 @@ const SignIn: React.FC = () => {
     }
     try {
       const response = await axios.post(`${API_BASE_URL}/user/signin`, { email, password });
-      const { accessToken } = response.data;
+      const { accessToken, userId } = response.data;
       localStorage.setItem('token', accessToken);
+      localStorage.setItem('userId', userId);
       setSuccessMessage('Logged in successfully.');
       navigate('/dashboard');
     } catch (error: any) {

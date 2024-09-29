@@ -71,8 +71,9 @@ const SignUp: React.FC = () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/user/signup`, { name, email, password });
       if (response.status === 201 || response.status === 200) {
-        const { accessToken } = response.data;
+        const { accessToken, userId } = response.data;
         localStorage.setItem('token', accessToken);
+        localStorage.setItem('userId', userId);
         setSuccessMessage('Logged in successfully.');
         navigate('/dashboard');
       } else {
