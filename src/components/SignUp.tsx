@@ -69,7 +69,7 @@ const SignUp: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/signup`, { name, email, password });
+      const response = await axios.post(`${API_BASE_URL}/user/signup`, { name, email, password });
       if (response.status === 201 || response.status === 200) {
         const { accessToken } = response.data;
         localStorage.setItem('token', accessToken);
