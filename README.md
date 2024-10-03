@@ -3,7 +3,7 @@
 Welcome to the EasyGenerator frontend repository! This project is a **React application** built with **TypeScript** and **Material-UI (MUI)**. It provides users with an intuitive interface to interact with the EasyGenerator services.
 
 ### 🚀 Live Demo
-Check out the live demo: [EasyGenerator Frontend](#)
+Check out the live demo: https://easygenerator-my-app.vercel.app/
 
 ## 🌟 Features
 
